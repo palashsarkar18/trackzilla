@@ -13,13 +13,18 @@ public class ApplicationNotFoundException  extends RuntimeException implements G
 
     private Map<String, Object> extensions = new HashMap<>();
 
-    public ApplicationNotFoundException(String message) {
+    /*public ApplicationNotFoundException(String message) {
         super(message);
-    }
+    }*/
 
     public ApplicationNotFoundException(String message, Long id) {
         super(message);
         extensions.put("invalideApplicationId", id);
+    }
+
+    public ApplicationNotFoundException(String message, String val) {
+        super(message);
+        extensions.put("invalideApplicationId", val);
     }
 
     @Override

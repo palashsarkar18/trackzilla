@@ -1,14 +1,12 @@
 package com.pluralsight.fundamentals.resolver;
 
-import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.pluralsight.fundamentals.entity.Application;
 import com.pluralsight.fundamentals.repository.ApplicationRepository;
-import org.springframework.stereotype.Component;
+import graphql.kickstart.tools.GraphQLQueryResolver;
 
-@Component
-public class Query  implements GraphQLQueryResolver {
+public class Query implements GraphQLQueryResolver {
 
-    private final ApplicationRepository applicationRepository;
+    private ApplicationRepository applicationRepository;
 
     public Query(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
@@ -18,7 +16,7 @@ public class Query  implements GraphQLQueryResolver {
         return applicationRepository.findAll();
     }
 
-    public long countApplications() {
-        return applicationRepository.count();
+    public int countApplications() {
+        return (int) applicationRepository.count();
     }
 }
