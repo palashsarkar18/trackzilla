@@ -1,5 +1,6 @@
 package com.pluralsight.fundamentals.web;
 
+import com.pluralsight.fundamentals.entity.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,6 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.springframework.test.util.AssertionErrors.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,16 +33,23 @@ public class TzaRestControllerIntegrationTest {
 
     @Test
     public void getAllApplications() throws Exception {
-        ResponseEntity<List> response =
-                this.restTemplate.getForEntity("http://localhost:" + port + "/applications/", List.class);
+        ResponseEntity<List<Application>> response =
+                this.restTemplate.exchange(
+                        "http://localhost:" + port + "/tzarest/applications/",
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<Application>>() {});
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+        // Ensure the response body is not null
+        // assertNotNull("Response body is null", response.getBody());
+        // Additional assertions can be added here
     }
 
     @Test
     public void getAllTickets() throws Exception {
         ResponseEntity<List> response =
-                this.restTemplate.getForEntity("http://localhost:" + port + "/tickets/", List.class);
+                this.restTemplate.getForEntity("http://localhost:" + port + "/tzarest/tickets/", List.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
